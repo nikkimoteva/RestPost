@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Collections.Generic;
@@ -15,19 +15,19 @@ using System.Net.Http.Headers;
 
 namespace myApp
 {
-    class Program
-    {
-        static void Main(string[] args)
+	class Program
+	{
+		static void Main(string[] args)
 		{
 			// make a post request to the following url
-			//string path = @"C:\Users\Administrator\Desktop\helloWorld\myApp\image.png";
 			postRequest("http://ptsv2.com/t/ela08-1582228791/post");
 			// will return the success or the error message provided in the url
 			// in this case, it will be : Thank you for this dump. I hope you have a lovely day!
 			Console.ReadKey();
 		}
-		async static void postRequest(string url){
 
+		async static void postRequest(string url)
+		{
 			var requestContent = new MultipartFormDataContent();
 
 			// make a new enum for posting. In the url, you will have the values paramters and values,
@@ -40,20 +40,17 @@ namespace myApp
 
 			// add new image for posting
 			Image newImage = Image.FromFile(@"C:\Users\Administrator\Desktop\helloWorld\myApp\image.png");
-			/*ImageConverter imgCon = new ImageConverter();
+			ImageConverter imgCon = new ImageConverter();
 			byte[] Imagedata = (byte[])imgCon.ConvertTo(newImage, typeof(byte[]));
 
 			// the keyword 'using' is used because client, response, and content are disposable and so will
 			// need to get released. By using this keyword, they will simply go out of scope.
-			using (var imageContent = new ByteArrayContent(Imagedata)){
+			using (var imageContent = new ByteArrayContent(Imagedata))
+			{
 				// both of the examples below work for adding the new image, will add the exact same image
+				requestContent.Add(new StreamContent(new MemoryStream(Imagedata)), "image", "image.png");
+				//requestContent.Add(newImage, "image", "image.png");
 
-				//requestContent.Add(new StreamContent(new MemoryStream(Imagedata)), "image", "image.png");
-				requestContent.Add(imageContent, "image", "image.png");*/
-				requestContent.Add(newImage, "image", "image.png");
-
-				//requestContent.Add(q);
-				//using (Stream stream = assembly.GetManifestResourceStream(resourceName)){
 				//we're posting 'queries' to the provided url, so form a url encoded content, containing queries
 				HttpContent q = new FormUrlEncodedContent(queries);
 				requestContent.Add(q, "query");
@@ -62,21 +59,20 @@ namespace myApp
 				{
 					// add text file
 					requestContent.Add(str, "rest", "rest.txt");
-		            using (HttpClient client = new HttpClient())
-		            {
-		            	using (HttpResponseMessage response = await client.PostAsync(url, requestContent))
-		                {
-		                    using (HttpContent content = response.Content)
-		                    {
-		                    	// print the response you'll get when you have made a post.
+					using (HttpClient client = new HttpClient())
+					{
+						using (HttpResponseMessage response = await client.PostAsync(url, requestContent))
+						{
+							using (HttpContent content = response.Content)
+							{
+								// print the response you'll get when you have made a post.
 								string mycontent = await content.ReadAsStringAsync();
 								Console.WriteLine(mycontent);
 							}
 						}
 					}
-				//}
-				//}
+				}
 			}
 		}
-    }
+	}
 }
