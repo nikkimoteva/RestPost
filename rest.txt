@@ -1,0 +1,32 @@
+using System;
+using System.Net;
+using System.Net.Http;
+
+namespace helloWorld {
+	class program {
+		static void Main(string[] args)
+		{
+			postRequest("http://pts2.com/t/ela08-1582228791/post");
+			Console.ReadKey();
+		}
+		async static void postRequest(string url){
+			IEnumerable<KeyValuePair<string, string>> queries = new List<KeyValuePair<string, string>>()
+			{
+				new KeyValuePair<string, string>("q1", "nikki");
+				new KeyValuePair<string, string>("q2", "winnie");
+			}
+			HttpContent q = new FormUrlEncodedContent(queries);
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response = await client.postAsync(url, q))
+                {
+                    using (HttpContent content = response.Content)
+                    {
+						string mycontent = await content.ReadAsStringAsync();
+						Console.WriteLine(mycontent);
+					}
+				}
+			}
+		}
+	}
+}
